@@ -1,0 +1,11 @@
+POST http://localhost:8081/employee
+Content-Type: application/json
+Authorization: Basic c3R1ZGVudDE6cGFzc3dvcmQx2
+
+{
+  "login" : "petrovSV",
+  "password": "init",
+  "firstName": "Egor",
+  "lastName": "Petrov",
+  "roles": ["ROLE_EMPLOYEE", "ROLE_ADMIN"]
+}
