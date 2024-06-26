@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
   <Title>Сотрудники компании</Title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 <h1>Сотрудники компании</h1>
@@ -14,21 +14,52 @@
 </#if>
 
 <form action="/ui/employee/update" method="post">
-  <p>Логин: <input type="text" name="login" required value=${employee.login} readonly></p>
-  <p>Пароль: <input type="password" name="password" required value=${employee.password}></p>
-  <p>Имя: <input type="text" name="firstName" required value=${employee.firstName}></p>
-  <p>Фамилия: <input type="text" name="lastName" required value=${employee.lastName}></p>
-  <p>Дата рождения: <input type="text" name="birthDate" required value=${employee.birthDate}></p>
-  <label for="roles">Роли:</label>
-  <select multiple name="roles">
-    <option value="ROLE_EMPLOYEE">ROLE_EMPLOYEE</option>
-    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-  </select>
-  <p><input type="submit" value="Обновить данные сотрудника"></p>
+  <table>
+    <tr>
+      <td><label for="login">Логин:</label></td>
+      <td><input type="text" name="login" required value=${employee.login} readonly></td>
+    </tr>
+    <tr>
+      <td><label for="password">Пароль:</label></td>
+      <td><input type="password" name="password" required value=${employee.password}></td>
+    </tr>
+    <tr>
+      <td><label for="firstName">Имя:</label></td>
+      <td><input type="text" name="firstName" required value=${employee.firstName}></td>
+    </tr>
+    <tr>
+      <td><label for="lasttName">Фамилия:</label></td>
+      <td><input type="text" name="lastName" required value=${employee.lastName}></td>
+    </tr>
+    <tr>
+      <td><label for="birthDate">Дата рождения:</label></td>
+      <td><input type="text" name="birthDate" required value=${employee.birthDate}></td>
+    </tr>
+    <tr>
+      <td><label>Роли:</label></td>
+      <td>
+            <select multiple name="roles">
+                <#list allRoles as role>
+                    <#if employee.roles?seq_contains(role)>
+                      <option value="${role}" selected>${role}</option>
+                    <#else>
+                      <option value="${role}">${role}</option>
+                    </#if>
+                </#list>
+            </select>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="submit" value="Обновить данные сотрудника" class="employee">
+      </td>
+    </tr>
+  </table>
+
 </form>
 
 <form action="/ui/employee/delete/${employee.login}" method="post">
-  <p><input type="submit" value="Уволить сотрудника"></p>
+  <input type="submit" value="Уволить сотрудника" class="delete">
 </form>
 
 </body>

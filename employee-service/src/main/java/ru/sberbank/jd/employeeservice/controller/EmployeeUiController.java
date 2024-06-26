@@ -89,12 +89,12 @@ public class EmployeeUiController {
      */
     @GetMapping("/ui/employee/{login}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public String getEmployeeInfo(@PathVariable String login, Model model) {
+    public String getEmployeeInfo(@PathVariable("login") String login, Model model) {
 
         EmployeeDto employeeDto = employeeService.findEmployeeByLogin(login);
         model.addAttribute("employee", employeeDto);
+        model.addAttribute("allRoles", EmployeeService.ALL_ROLES);
         return "employee";
-
     }
 
     /**
@@ -125,7 +125,7 @@ public class EmployeeUiController {
      */
     @PostMapping("/ui/employee/delete/{login}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public String deleteEmployee(@PathVariable String login, Model model) {
+    public String deleteEmployee(@PathVariable("login") String login, Model model) {
         try {
             employeeService.deleteByLogin(login);
         } catch (Exception exception) {

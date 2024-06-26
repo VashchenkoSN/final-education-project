@@ -1,17 +1,17 @@
 package ru.sberbank.jd.employeeservice.converter;
 
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import ru.sberbank.jd.employeeservice.dto.EmployeeDto;
+import ru.sberbank.jd.employeeservice.dto.RoleDto;
 import ru.sberbank.jd.employeeservice.entity.Employee;
+import ru.sberbank.jd.employeeservice.entity.Role;
 
 /**
- * Конвертер для Employee
+ * Конвертер для Employee.
  */
 @Component
 public class EmployeeConverter {
-
-    private static final String EMPTY_STRING = "";
-
     /**
      * Конвертер Employee -> EmployeeDto
      *
@@ -19,15 +19,15 @@ public class EmployeeConverter {
      * @return - employeeDto
      */
     public EmployeeDto convertEntityToDto(Employee employee) {
-        return EmployeeDto.builder()
-                .login(employee.getLogin())
-                .password(employee.getPassword())
-                .firstName(employee.getFirstName())
-                .lastName(employee.getLastName())
-                .roles(employee.getRoles())
-                .birthDate(employee.getBirthDate())
-//                .department_id(employee.getDepartment().getId())
-                .build();
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setLogin(employee.getLogin());
+        employeeDto.setPassword(employee.getPassword());
+        employeeDto.setFirstName(employee.getFirstName());
+        employeeDto.setLastName(employee.getLastName());
+        employeeDto.setRoles(employee.getRoles().stream().map(role -> RoleDto.valueOf(role.name())).collect(Collectors.toSet()));
+        employeeDto.setBirthDate(employee.getBirthDate());
+
+        return employeeDto;
     }
 
     /**
@@ -43,12 +43,8 @@ public class EmployeeConverter {
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());
         employee.setBirthDate(employeeDto.getBirthDate());
-        employee.setRoles(employeeDto.getRoles());
+        employee.setRoles(employeeDto.getRoles().stream().map(role -> Role.valueOf(role.name())).collect(Collectors.toSet()));
         return employee;
-    }
-
-    private String convertIfNull(String someString) {
-        return someString != null ? someString : EMPTY_STRING;
     }
 
 }

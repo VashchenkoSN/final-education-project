@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html lang = "ru">
+<html lang="ru">
 <head>
   <Title>Сотрудники компании</Title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 <h1>Сотрудники компании</h1>
-<span>Вы зашли как: <i>${user.login}</i></span>
-<form action="/logout" method="post">
-  <input type="submit" value="Выйти"/>
-</form>
+
+<table width="30%">
+  <tr>
+    <td>Вы зашли как: <i>${user.login}</i></td>
+    <td>
+      <form action="/logout" method="post">
+        <input type="submit" value="Выйти" class="loginButton"/>
+      </form>
+    </td>
+  </tr>
+</table>
+
 <h3>Список сотрудников компании</h3>
 
 <#if employees??>
-  <table id="employee-table">
+  <table class="employee-table">
     <tr>
-      <td>Логин сотрудника</td>
-      <td>Фамилия</td>
-      <td>Имя</td>
-      <td>Дата рождения</td>
+      <td style="font-weight: bold">Логин сотрудника</td>
+      <td style="font-weight: bold">Фамилия</td>
+      <td style="font-weight: bold">Имя</td>
+      <td style="font-weight: bold">Дата рождения</td>
     </tr>
       <#list employees as employee>
         <tr>

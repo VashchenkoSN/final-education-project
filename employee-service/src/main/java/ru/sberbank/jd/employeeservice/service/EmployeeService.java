@@ -2,6 +2,7 @@ package ru.sberbank.jd.employeeservice.service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import ru.sberbank.jd.employeeservice.entity.Employee;
 import ru.sberbank.jd.employeeservice.repository.EmployeeRepository;
 
 /**
- * Сервисный класс для Employee
+ * Сервисный класс для операций с сущностью "Сотрудник".
  */
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class EmployeeService {
 
     private final EmployeeRepository repository;
     private final EmployeeConverter converter;
+    public static final Set<String> ALL_ROLES = Set.of("ROLE_EMPLOYEE", "ROLE_ADMIN");
 
     /**
      * Найти и вернуть сотрудника по логину.
@@ -57,17 +59,17 @@ public class EmployeeService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пароль должен быть заполнен");
         }
         if (repository.findById(login).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     String.format("Сотрудник с логином %s уже существует", login));
         }
         repository.save(employee);
-        log.info("Saving new employee: {}", employee.getLogin());
+        log.info("Saving new employee with data {}", employee);
 
         return employeeDto;
     }
 
     /**
-     * Обновить данные сотрудника в репозитории.
+     * Обновить данные сотрудника.
      *
      * @param employeeDto - данные сотрудника
      * @return - данные сотрудника
@@ -76,19 +78,21 @@ public class EmployeeService {
         String login = employeeDto.getLogin();
         repository.findById(login)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND,
-                        String.format("Employee with login %s is not exists", login)));
+                        String.format("Сотрудник с логином %s не существует", login)));
         Employee employee = converter.convertDtoToEntity(employeeDto);
         repository.save(employee);
+        log.info("Update employee with data {}", employee);
         return employeeDto;
     }
 
     /**
-     * Удалить сотрудника из репозитория.
+     * Удалить сотрудника.
      *
      * @param login - логин удаляемого сотрудника
      */
     public void deleteByLogin(String login) {
         repository.deleteById(login);
+        log.info("Deleting employee with login {}", login);
     }
 
     /**
@@ -96,8 +100,8 @@ public class EmployeeService {
      *
      * @return - список сотрудников компании
      */
-    public List<Employee> getAll() {
-        return repository.findAll();
+    public List<EmployeeDto> getAll() {
+        return repository.findAll().stream().map(converter::convertEntityToDto).toList();
     }
 
     /**

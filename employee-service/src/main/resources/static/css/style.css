@@ -1,0 +1,73 @@
+body {
+  background-color: lavender;
+  margin-left: 20%;
+  margin-right: 20%;
+  font-family: Times, serif;
+  border: 2px black dotted;
+  padding: 10px;
+}
+
+
+span {
+  padding: 3px;
+}
+
+input {
+  border-radius: 4px;
+  margin: 3px;
+  padding: 3px;
+}
+
+input[type = "submit"] {
+  background-color: whitesmoke;
+  margin-top: 10px;
+  border-radius: 5px;
+  padding: 3px;
+  width: 100%;
+}
+
+input[type = "submit"]:hover {
+  background-color: #accdff;
+  color: white;
+}
+
+table.employee-table {
+  width: 80%;
+  border-collapse: collapse;
+
+}
+
+table.employee-table tr {
+  padding: 3px;
+  margin: 3px;
+  border-bottom: 1px solid grey;
+}
+
+table.employee-table tr:first-child {
+  padding: 3px;
+  margin: 3px;
+  background-color: lightgrey;
+  border-bottom: 1px solid grey;
+}
+
+table.employee-table tr:hover {
+  padding: 3px;
+  margin: 3px;
+  background-color: #accdff;
+  border-bottom: 1px solid grey;
+}
+
+table.employee-table td {
+  padding: 3px;
+  margin: 3px;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+a :hover {
+  color: red;
+}
+

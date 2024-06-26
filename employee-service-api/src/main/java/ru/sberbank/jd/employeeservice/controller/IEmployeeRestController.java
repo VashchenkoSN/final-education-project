@@ -1,28 +1,15 @@
 package ru.sberbank.jd.employeeservice.controller;
 
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import ru.sberbank.jd.employeeservice.dto.EmployeeDto;
-import ru.sberbank.jd.employeeservice.service.EmployeeService;
 
-/**
- * Контроллер для Employee
- */
-@RestController
-@Slf4j
-@RequiredArgsConstructor
-public class EmployeeRestController implements IEmployeeRestController{
-
-    private final EmployeeService employeeService;
+public interface IEmployeeRestController {
 
     /**
      * Получить данные сотрудника по логину.
@@ -31,11 +18,8 @@ public class EmployeeRestController implements IEmployeeRestController{
      * @return - данные сотрудника
      */
     @GetMapping("employee/{login}")
-    @Override
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public EmployeeDto findByLogin(@PathVariable("login") String login) {
-        return employeeService.findEmployeeByLogin(login);
-    }
+    EmployeeDto findByLogin(@PathVariable("login") String login);
+
 
     /**
      * Создать сотрудника.
@@ -44,11 +28,8 @@ public class EmployeeRestController implements IEmployeeRestController{
      * @return - данные сотрудника
      */
     @PostMapping("employee")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @Override
-    public EmployeeDto create(@RequestBody EmployeeDto employeeDto) {
-        return employeeService.createEmployee(employeeDto);
-    }
+    EmployeeDto create(@RequestBody EmployeeDto employeeDto);
+
 
     /**
      * Обновить данные сотрудника.
@@ -57,11 +38,8 @@ public class EmployeeRestController implements IEmployeeRestController{
      * @return - данные сотрудника
      */
     @PutMapping("employee")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @Override
-    public EmployeeDto update(@RequestBody EmployeeDto employeeDto) {
-        return employeeService.updateEmployee(employeeDto);
-    }
+    EmployeeDto update(@RequestBody EmployeeDto employeeDto);
+
 
     /**
      * Удалить сотрудника.
@@ -69,11 +47,8 @@ public class EmployeeRestController implements IEmployeeRestController{
      * @param login - логин сотрудника
      */
     @DeleteMapping("employee/{login}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @Override
-    public void delete(@PathVariable("login") String login) {
-        employeeService.deleteByLogin(login);
-    }
+    void delete(@PathVariable("login") String login);
+
 
     /**
      * Получить список всех сотрудников.
@@ -81,10 +56,6 @@ public class EmployeeRestController implements IEmployeeRestController{
      * @return - список сотрудников
      */
     @GetMapping("employees")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @Override
-    public List<EmployeeDto> getEmpoloyeesList() {
-        return employeeService.getAll();
-    }
+    List<EmployeeDto> getEmpoloyeesList();
 
 }

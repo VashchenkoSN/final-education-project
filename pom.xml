@@ -15,32 +15,55 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <junit.version>5.10.1</junit.version>
+        <lombok.version>1.18.30</lombok.version>
+        <spring-boot-dependences.version>3.2.5</spring-boot-dependences.version>
+        <telegram-bots.version>5.0.1</telegram-bots.version>
+        <open-feign.version>4.1.0</open-feign.version>
+        <employee-service.version>0.0.1-SNAPSHOT</employee-service.version>
     </properties>
 
     <modules>
+        <module>employee-service-api</module>
         <module>employee-service</module>
+        <module>tgbot-service</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>ru.sberbank.jd</groupId>
+                <artifactId>employee-service-api</artifactId>
+                <version>${employee-service.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.10.1</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.30</version>
+                <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.2.5</version>
+                <version>${spring-boot-dependences.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots</artifactId>
+                <version>${telegram-bots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${open-feign.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

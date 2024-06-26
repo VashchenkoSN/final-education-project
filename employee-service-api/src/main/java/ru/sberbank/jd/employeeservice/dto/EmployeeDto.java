@@ -8,14 +8,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.sberbank.jd.employeeservice.entity.Role;
 
+/**
+ * DTO для сущности "Сотрудник".
+ */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class EmployeeDto {
+
     private String login;
 
     private String password;
@@ -26,7 +29,7 @@ public class EmployeeDto {
 
     private LocalDate birthDate;
 
-    private Set<Role> roles;
+    private Set<RoleDto> roles;
 
     private UUID department_id;
 }

@@ -1,4 +1,3 @@
-INSERT INTO employee_role
-(employee_login, roles)
-VALUES('admin', 'ROLE_EMPLOYEE'),
-      ('admin', 'ROLE_ADMIN');
+INSERT INTO department
+(id, title)
+VALUES(X'9fad5e9eefdfb449', 'Департамент недвижимости и эксплуатации');
