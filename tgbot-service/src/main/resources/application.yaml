@@ -1,0 +1,22 @@
+bot:
+  name: CompanyEmployerBot
+  token: 7244519908:AAHY8ZBhMN-CYlgQCAJBujnoetGlrYrptYk
+  invite-link: https://t.me/+mdxfZeiUmv1iNGMy
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/tgbot
+    username: root
+    password: mmx31sse
+  jpa:
+    hibernate:
+      ddl-auto: none
+  flyway:
+    enabled: true
+
+
+feign:
+  employee-service:
+    url: http://localhost:8081
+  username: admin
+  password: admin
