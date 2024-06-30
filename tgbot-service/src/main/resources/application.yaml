@@ -2,6 +2,8 @@ bot:
   name: CompanyEmployerBot
   token: 7244519908:AAHY8ZBhMN-CYlgQCAJBujnoetGlrYrptYk
   invite-link: https://t.me/+mdxfZeiUmv1iNGMy
+  company-chat-id: -1002221380356
+
 
 spring:
   datasource:
@@ -20,3 +22,6 @@ feign:
     url: http://localhost:8081
   username: admin
   password: admin
+
+job:
+  cron: 0 */5 * * * *

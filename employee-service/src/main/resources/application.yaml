@@ -13,9 +13,7 @@ spring:
   application:
     name: employee-service
 
-springdoc:
-  swagger-ui:
-    path: /swagger
-
 server:
   port: 8081
+
+

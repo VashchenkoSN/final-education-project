@@ -9,7 +9,7 @@ import feign.auth.BasicAuthRequestInterceptor;
 import org.springframework.stereotype.Component;
 
 /**
- * Конфигурация FeignClient
+ * Конфигурация FeignClient.
  */
 @Component
 @Configuration

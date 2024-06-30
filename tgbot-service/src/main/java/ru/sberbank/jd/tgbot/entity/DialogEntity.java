@@ -11,7 +11,10 @@ import lombok.Setter;
 @Setter
 public class DialogEntity {
     private Long chatId;
+    private User user;
     private DialogState dialogState;
     private String lastUserMessage;
     private String lastBotMessage;
+
+    private Notification notification;
 }

@@ -1,7 +1,9 @@
 package ru.sberbank.jd.employeeservice.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -32,9 +34,10 @@ class EmployeeRestControllerTest {
     private MockMvc mockMvc;
 
     /**
-     * Тест контроллера поиска сотрудника по логину.
+     * Тест эндпойнта поиска сотрудника по логину.
      */
     @Test
+    @WithMockUser(authorities = "ROLE_ADMIN")
     void findEmployeeByLogin() throws Exception {
         EmployeeDto employeeDto = DataHelper.createEmployeeDto();
         Mockito.when(employeeService.findEmployeeByLogin("test_login")).thenReturn(employeeDto);
@@ -44,7 +47,7 @@ class EmployeeRestControllerTest {
     }
 
     /**
-     * Тест создания сотрудника с ролью ROLE_ADMIN- успешно.
+     * Тест эндпойнта создания сотрудника с ролью ROLE_ADMIN- успешно.
      */
     @Test
     @WithMockUser(authorities = "ROLE_ADMIN")
@@ -59,6 +62,36 @@ class EmployeeRestControllerTest {
                                 + "  \"lastName\": \"Petrov\",\n"
                                 + "  \"roles\": [\"ROLE_EMPLOYEE\", \"ROLE_ADMIN\"]\n"
                                 + "}"))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Тест эндпойнта обновления данных сотрудника с ролью ROLE_ADMIN- успешно.
+     */
+    @Test
+    @WithMockUser(authorities = "ROLE_ADMIN")
+    void updateEmployee_200OK() throws Exception {
+
+        mockMvc.perform(put("/employee")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\n"
+                                + "  \"login\" : \"petrovSV\",\n"
+                                + "  \"password\": \"init\",\n"
+                                + "  \"firstName\": \"Egor\",\n"
+                                + "  \"lastName\": \"Petrov\",\n"
+                                + "  \"roles\": [\"ROLE_EMPLOYEE\", \"ROLE_ADMIN\"]\n"
+                                + "}"))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Тест эндпойнта увольнения сотрудника с ролью ROLE_ADMIN- успешно.
+     */
+    @Test
+    @WithMockUser(authorities = "ROLE_ADMIN")
+    void deleteEmployee_200OK() throws Exception {
+
+        mockMvc.perform(delete("/employee/test_login"))
                 .andExpect(status().isOk());
     }
 }

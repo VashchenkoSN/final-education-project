@@ -20,9 +20,18 @@ import lombok.Setter;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(name = "login")
-    private String login;
-
     @Column(name = "chat_id")
     private Long chatId;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "login")
+    private String login;
 }

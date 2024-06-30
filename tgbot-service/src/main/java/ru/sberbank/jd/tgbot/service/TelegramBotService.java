@@ -4,10 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.sberbank.jd.tgbot.config.BotConfig;
+import ru.sberbank.jd.tgbot.converter.UserConverter;
+import ru.sberbank.jd.tgbot.entity.Notification;
+import ru.sberbank.jd.tgbot.entity.User;
 
 
 /**
@@ -20,6 +24,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
     private final DialogService dialogService;
+    private final UserConverter userConverter;
 
     /**
      * Возвратить токен бота.
@@ -50,16 +55,20 @@ public class TelegramBotService extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        if (update.hasMessage() && update.getMessage().hasText() &&
+                update.getMessage().getChat().isUserChat()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
+            User user = userConverter.convertChatToUser(
+                    update.getMessage().getFrom(), update.getMessage().getChat());
+
             switch (messageText) {
                 case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
+                    startCommandReceived(chatId, user);
                     break;
                 default:
-                    processUserMessage(chatId, messageText);
+                    processUserMessage(chatId, user, messageText);
             }
         }
     }
@@ -67,11 +76,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
     /**
      * Стартовое приветствие бота.
      *
-     * @param chatId    - id чата.
-     * @param firstName - имя пользователя из телеграмма.
+     * @param chatId - id чата.
+     * @param user   - пользователь.
      */
-    private void startCommandReceived(long chatId, String firstName) {
-        dialogService.init(chatId, firstName);
+    private void startCommandReceived(long chatId, User user) {
+        dialogService.init(chatId, user);
         sendMessage(chatId, dialogService.get(chatId).getLastBotMessage());
         log.info("ChatId {} - Bot send message '{}'", chatId, dialogService.get(chatId).getLastBotMessage());
     }
@@ -101,10 +110,38 @@ public class TelegramBotService extends TelegramLongPollingBot {
      * @param chatId   - id чата
      * @param message- текст сообщения
      */
-    private void processUserMessage(long chatId, String message) {
+    private void processUserMessage(long chatId, User user, String message) {
+        if (dialogService.get(chatId) == null) {
+            dialogService.init(chatId, user);
+        }
         log.info("ChatId {} - User send message '{}'", chatId, message);
         String botAnswer = dialogService.processMessage(chatId, message);
         sendMessage(chatId, botAnswer);
+
+        //уведомления другим пользователям
+        Notification notification = dialogService.get(chatId).getNotification();
+        if (notification != null) {
+            sendMessage(notification.getChatId(), notification.getTextToSend());
+            dialogService.get(chatId).setNotification(null);
+        }
+
+    }
+
+    /**
+     * Удалить участника группы.
+     *
+     * @param user - участник
+     */
+    public void deleteFromCompanyChat(User user) {
+
+        KickChatMember kickChatMember = new KickChatMember(botConfig.getCompanyChatId(), user.getChatId().intValue());
+        try {
+            execute(kickChatMember);
+            log.info("User with login {} was deleted from Company chat", user.getLogin());
+        } catch (TelegramApiException exception) {
+            log.info(exception.getMessage());
+        }
+
     }
 
 }

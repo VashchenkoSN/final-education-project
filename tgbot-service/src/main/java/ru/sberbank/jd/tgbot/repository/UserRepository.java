@@ -1,5 +1,6 @@
 package ru.sberbank.jd.tgbot.repository;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.sberbank.jd.tgbot.entity.User;
@@ -9,5 +10,7 @@ import ru.sberbank.jd.tgbot.entity.User;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
+
+    Optional<User> findByLogin(String string);
 
 }

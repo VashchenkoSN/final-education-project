@@ -1,5 +1,6 @@
 package ru.sberbank.jd.tgbot.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,25 @@ public class UserService {
     public User addUser(User user) {
         log.info("User with login {} was saved in DB", user.getLogin());
         return repository.save(user);
+    }
+
+    /**
+     * Поиск пользователя по логину.
+     *
+     * @param login - логин
+     * @return - пользователь
+     */
+    public User findUserByLogin(String login) {
+        return repository.findByLogin(login).orElse(null);
+    }
+
+    /**
+     * Вернуть список всех участников группы.
+     *
+     * @return - список участников группы
+     */
+    public List<User> findAll() {
+        return repository.findAll();
     }
 
 }
