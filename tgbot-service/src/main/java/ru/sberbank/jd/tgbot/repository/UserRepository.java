@@ -9,7 +9,7 @@ import ru.sberbank.jd.tgbot.entity.User;
  * Репозиторий для User.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByLogin(String string);
 

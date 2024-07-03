@@ -1,7 +1,7 @@
 bot:
   name: CompanyEmployerBot
   token: 7244519908:AAHY8ZBhMN-CYlgQCAJBujnoetGlrYrptYk
-  invite-link: https://t.me/+mdxfZeiUmv1iNGMy
+  invite-link: https://t.me/+li1J8FDF3VJhZTAy
   company-chat-id: -1002221380356
 
 
@@ -24,4 +24,4 @@ feign:
   password: admin
 
 job:
-  cron: 0 */5 * * * *
+  cron: 0 */1 * * * *

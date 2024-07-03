@@ -18,7 +18,7 @@
         <junit.version>5.10.1</junit.version>
         <lombok.version>1.18.30</lombok.version>
         <spring-boot-dependences.version>3.2.5</spring-boot-dependences.version>
-        <telegram-bots.version>5.0.1</telegram-bots.version>
+        <telegram-bots.version>5.6.0</telegram-bots.version>
         <open-feign.version>4.1.0</open-feign.version>
         <employee-service.version>0.0.1-SNAPSHOT</employee-service.version>
     </properties>

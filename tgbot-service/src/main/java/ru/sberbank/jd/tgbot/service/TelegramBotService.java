@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.groupadministration.KickChatMember;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.BanChatMember;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.UnbanChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -25,6 +26,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private final BotConfig botConfig;
     private final DialogService dialogService;
     private final UserConverter userConverter;
+    private final ChatMemberService chatMemberService;
 
     /**
      * Возвратить токен бота.
@@ -55,12 +57,27 @@ public class TelegramBotService extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
+
+//        UnbanChatMember unbanChatMember = new UnbanChatMember(botConfig.getCompanyChatId(), Long.valueOf("314769484"));
+//        try {
+//            execute(unbanChatMember);
+//        } catch (TelegramApiException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        if (update.getMessage().getChat().getId().toString().equals( botConfig.getCompanyChatId())){
+
+            chatMemberService.processNewChatMembers(update.getMessage().getNewChatMembers());
+
+            chatMemberService.processLeftChatMembers(update.getMessage().getLeftChatMember());
+        }
+
         if (update.hasMessage() && update.getMessage().hasText() &&
                 update.getMessage().getChat().isUserChat()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            User user = userConverter.convertChatToUser(
+            User user = userConverter.convertTgUserToUser(
                     update.getMessage().getFrom(), update.getMessage().getChat());
 
             switch (messageText) {
@@ -130,14 +147,14 @@ public class TelegramBotService extends TelegramLongPollingBot {
     /**
      * Удалить участника группы.
      *
-     * @param user - участник
+     * @param userId - Id пользователя
      */
-    public void deleteFromCompanyChat(User user) {
+    public void deleteFromCompanyChat(Long userId) {
 
-        KickChatMember kickChatMember = new KickChatMember(botConfig.getCompanyChatId(), user.getChatId().intValue());
+        BanChatMember banChatMember = new BanChatMember(botConfig.getCompanyChatId(), userId);
         try {
-            execute(kickChatMember);
-            log.info("User with login {} was deleted from Company chat", user.getLogin());
+            execute(banChatMember);
+            log.info("User with login {} was deleted from Company chat", userId);
         } catch (TelegramApiException exception) {
             log.info(exception.getMessage());
         }

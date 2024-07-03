@@ -10,21 +10,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Сущность пользователь.
+ * Сущность участник группы.
  */
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
-public class User {
+@Table(name = "chat_members")
+public class ChatMember {
+
     @Id
     @Column(name = "id")
     private Long id;
-
-    @Column(name = "chat_id")
-    private Long chatId;
 
     @Column(name = "username")
     private String username;
@@ -34,7 +32,4 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "login")
-    private String login;
 }

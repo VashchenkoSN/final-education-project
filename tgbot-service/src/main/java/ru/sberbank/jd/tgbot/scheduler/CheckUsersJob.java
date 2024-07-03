@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.sberbank.jd.tgbot.service.UserCheckService;
-import ru.sberbank.jd.tgbot.service.TelegramBotService;
+import ru.sberbank.jd.tgbot.service.ChatMembersCheckService;
 
 /**
  * Фоновое задание по проверке пользователей группы.
@@ -16,8 +15,7 @@ import ru.sberbank.jd.tgbot.service.TelegramBotService;
 @RequiredArgsConstructor
 public class CheckUsersJob {
 
-    private final UserCheckService userCheckService;
-    private final TelegramBotService telegramBotService;
+    private final ChatMembersCheckService chatMembersCheckService;
 
     /**
      * Фоновое задание по проверке пользователей группы.
@@ -25,9 +23,9 @@ public class CheckUsersJob {
     @Scheduled(cron = "${job.cron}")
     @Async
     public void checkUser() {
-        log.info("Start verification users of group");
+        log.info("Start verification members of group");
 
-        userCheckService.checkAndDeleteChatMembers();
+         chatMembersCheckService.checkAndDeleteChatMembers();
 
     }
 
