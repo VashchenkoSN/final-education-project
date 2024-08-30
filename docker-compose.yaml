@@ -1,33 +1,12 @@
 version: '3.8'
 services:
 
-  employee-service:
-    build:
-      dockerfile: Dockerfile
-      context: employee-service
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-employee:3306/employees?allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: mmx31sse
-
-    ports:
-    - '8081:8080'
-
-  tgbot-service:
-    build:
-      dockerfile: Dockerfile
-      context: tgbot-service
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-tgbot:3306/tgbot?allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: mmx31sse
-
   mysql-employee:
     image: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: mmx31sse
-      MYSQL_DATABASE: employee
+      MYSQL_DATABASE: employees
     ports:
       - '8085:3306'
 
@@ -39,3 +18,26 @@ services:
       MYSQL_DATABASE: tgbot
     ports:
       - '8086:3306'
+
+  employee-service:
+    build:
+      dockerfile: Dockerfile
+      context: employee-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-employee:3306/employees?allowPublicKeyRetrieval=true
+    depends_on:
+    - mysql-employee
+    restart: on-failure
+    ports:
+    - '8081:8081'
+
+  tgbot-service:
+    build:
+      dockerfile: Dockerfile
+      context: tgbot-service
+    depends_on:
+    - mysql-tgbot
+    restart: on-failure
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-tgbot:3306/tgbot?allowPublicKeyRetrieval=true
+      FEIGN_EMPLOYEE-SERVICE_URL: http://employee-service:8081

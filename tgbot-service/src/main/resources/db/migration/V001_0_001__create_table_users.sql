@@ -1,4 +1,4 @@
-CREATE TABLE USERS
+CREATE TABLE users
 (
     ID            BIGINT NOT NULL,
     CHAT_ID       BIGINT NOT NULL,

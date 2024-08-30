@@ -1,4 +1,4 @@
-CREATE TABLE CHAT_MEMBERS
+CREATE TABLE chat_members
 (
     ID            BIGINT NOT NULL,
     USERNAME      VARCHAR(255),
